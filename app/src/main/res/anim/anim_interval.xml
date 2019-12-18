@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--淡入淡出 interpolator 代表插值器，控制动画的变化速率-->
+    <alpha
+        android:duration="3000"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.5" />
+
+    <!--
+    缩放
+        pivot主要用在translate和scale动画中，这两种动画牵扯到view的"物理位置"
+        变化，所以需要一个参考点。而pivotX和pivotY就共同决定了这个点，它的值可以是
+        float或者百分比数值
+
+        ex:
+            10:距离动画所在view自身左边缘10像素
+            10% :距离动画所在view自身左边缘 的距离是整个view宽度的10%
+            10%p:距离动画所在view父控件左边缘的距离是整个view宽度的10%
+
+    -->
+    <scale
+        android:duration="3000"
+        android:fromXScale="0.0"
+        android:fromYScale="0.0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.0"
+        android:toYScale="1.0"/>
+
+
+    <!--位移-->
+    <translate
+        android:fromXDelta="0"
+        android:toXDelta="100"
+        android:fromYDelta="0"
+        android:toYDelta="100" />
+
+    <!--旋转-->
+    <rotate
+        android:fromDegrees="0"
+        android:toDegrees="720"
+        android:pivotX = "50%"
+        android:pivotY="50%"
+        android:duration = "3000"
+        />
+
+
+</set>

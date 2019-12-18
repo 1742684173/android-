@@ -1,0 +1,106 @@
+
+Support Annotation Library 是从Android Support Library 19.1开始引入的一个全新的函数包，它本身包含一系列有用的元注解，用来帮助开发者在编译期间发生可能存在的Bug。Support Library 本身也使用Annotation Library 提供的注解来完善自身代码质量，Android Studio为Annotation Library 提供了可视化的交互以方便开发者发现问题。
+support- annotation-23.1.1 函数包中，总共包含39种注解，按照类型分别进行介绍：
+
+       （1）资源类型的注解
+                资源在Android中通常是以整型值表示，并保存在R.java 文件中。这意味着需要传入资源值的函数，如果传入的不是资 源值不会在编译期报错，只会在运行时执行到相应的代码才能发现问题，则使用资源类型注解可以防止这种情况的出现。
+                资源类型的注解作用于函数参数、返回值及类的变量，在support-annotations-23.1.1 中，每种资源类型对应一个注解。
+
+         ☯ AnimatorRes: 标记整型值是 android.R.animator 类型。
+         ☯ AnimRes: 标记整型值是android.R.anim 类型。
+         ☯ AnyRes:标记整型值是任何一种资源类型，如果确切知道表示的是哪一种具体资源的话，建议显示指定。
+         ☯ ArrayRes：标记整型值是android.R.array 类型。
+         ☯ AttrRes : 标记整型值是 android.R.attr 类型。
+         ☯ BoolRes : 标记整型值布尔类型。
+         ☯ ColorRes : 标记整型值是 android.R.color 类型。
+         ☯ DrawableRes : 标记整型值是 android.R.
+         ☯ FractionRes：标记整型值是fraction 类型，这个比较少见，这种类型的资源常见于Animation.xml中，比如50%P、表示占parent的50%。
+         ☯ IdRes：标记整型值是android.R.id 类型。
+         ☯ IntegerRes : 标记整型值是 android.R.integer 类型。
+         ☯ InterpolatorRes：标记整型值是 android.R.interpolator 类型。
+         ☯ LayoutRes：标记整形值是 android.R.layout 类型。
+         ☯ MenuRes：标记整型值是 android.R.menu 类型。
+         ☯ PluralsRes：标记整型值是 android.R.plurals 类型，表示复数字符串类型，具体可参见官网。
+         ☯ RawRes：标记整型值是android.R.raw 类型
+         ☯ StringRes：标记整型值是android.R.string 类型
+         ☯ StyleableRes：标记资源类型是android.R.styleable 类型
+         ☯ StyleRes：标记整型值是 android.R.style 类型
+         ☯ TransitionRes：标记整形值是 transition 类型
+         ☯ XmlRes：标记整型值是android.R.xml 类型。
+
+
+        （2）注解使用
+          @Nullable 作用于函数参数或者返回值，标记参数或者返回值可以为空。
+          @NonNull 作用于函数参数或者返回值，标记参数或者返回值不可以为空。
+
+        (3）、类型定义注解
+            在Android开发中，整型值不止经常用来代表资源引用值，而且经常用来代替枚举值@IntDet注解用来创建一个整型类型定义的新注解，可以使用这个新注解来标记自己编写的API
+
+        (4）线程注解
+
+        Android 应用开发过程中，经常会涉及多种线程的使用，界面相关的操作必须在主线程，而耗时操作例如文件下载等则需要放在后台线程中。线程相关的注解有四种。
+         @UiThread：标记运行在UI线程，一个UI线程Activity运行所在的主窗口，对于一个应用而言，可能存在多个UI线程，每个UI线程对应不同的主窗口。
+         @MainThread：标记运行在主线程，一个应用只有一个主线程，主线程也是@UIThread线程。通常情况下，我们使用@MainThread来注解声明周期相关的函数，使用@UIThread来注解视图相关函数，一般情况下@MainThread和@UiThread 可以互换使用的。
+         @WorkerThread：标记运行在后台的注解。
+         @BinderThread：标记运行在Binder的线程。
+
+       （5）RGB颜色值注解
+            在资源类型注解中使用@ColorRes来标记参数类型需要传入颜色类型的资源id，使用@ColorInt 注解则是标记参数类型需要传入RGB或者ARGB 颜色值，在TextView 源码中可以找到@ColorInt的例子
+
+        （6）值范围注解：
+             当函数参数的取值是在一定范围内时，可以使用值范围注解来防止调用者传入错误的参数，这中类型的注解有三种：
+           ①、 @Size：对于类似数组、集合和字符串之类的参数，可以使用@Size 注解来表示这些参数的大小。用法如下：
+           @Size（min=1） // 可以表示集合不可以为空
+           @Size（max=23） //可以表示字符串最大字符个数是23
+           @Size（2） //可以表示数组元素个数是2个
+           @Size（multiple=2） //可以表示数组大小是2的倍数
+
+           ②、@IntRange：参数类型是int或者Long，用法如下
+               public  void  setAlpha(@IntRange(from=0,to=25)    int   alpha){....}
+
+           ③、@FloatRange：参数类型是float 或者 double ,用法如下。
+               public  void  setAlpha(@FloatRange(from=0,to=1.0)   float    alpha){....}
+
+        （7）权限注解
+              Android应用在使用某些系统功能时，需要在AndroidManifest.xml中声明权限，否则在运行时会提示缺失对应的权限。为了在编译期及时发现缺失的全权，我们可以使用@RequiresPermission 注解。
+                如果函数调用需要声明一个权限，语句如下。
+               @requiresPermission(Mainfest.permission.SET_WALLPAPER)
+              public  abstract  void  setWallpaper(Bitmap  bitmap) throws  IOException;
+
+               如果函数调用需要声明集合中最少一个权限，语句如下。
+               @requiresPermission(anyOf= {Mainfest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION})
+               public  abstract  Location  getLastKnownLocation(String  provider);
+
+               如果函数调用需要同时声明多个权限，语句如下。
+               @requiresPermission(allOf={Mainfest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION})
+               public  abstract  final  void upateVisitedHistory( ContentResolver  cr,String  url, boolean  real)
+
+               对于Intent调用所需权限，可以在Intent的ACTION字符串定义处添加注解，语句如下。
+               @requiresPermission(android.Minfest.permission.BLUETOOTH)
+               public  static final  String ACTION_REQUEST_DISCOVERABLE="android.bluetooth.adapter.action.REQUEST_DISCOVERABLE"
+
+               对于ContentProvider 相关所需要的权限，可能同时需要读和写这两个操作对应不同的权限声明，语句如下。
+
+               @RequiresPermission.Read(@RequiresPermission(READ_HISTORY_BOOKMARKS))
+               @RequiresPermission.Write(@RequiresPermission(WRITE_HISTORY_BOOKMARKS))
+               pbulic  static  final  Uri  BOOKMARKS_URI=Uri.parse("content://browser/bookmarks");
+
+
+        （8）重写函数注解
+               如果API允许调用者重写某个函数，但同时要求写的函数需要调用被重写的函数，否则代码逻辑可能错误，那么可以使用@CallSuper 注解开提示开发者，语句如下。
+              @CallSuper
+              protected   void  onCreate(@Nullable   Bundle    savedInstanceState);
+
+       （9）返回值注解
+               如果编写的函数需要调用者对返回值做某些处理，那么可以使用@CheckResult 注解来提示开发者。当然没有必要对每个非空返回值的函数都添加这个注解，该注解的主要目的是让调用者在使用API时不至于怀疑该函数是否会产生副作用。在Android源码中，Context类的checkPermission 函数使用了该注解。
+               @CheckResult( suggest="#enforcePermission( String ,int , int , String )")
+               @PackageManager.PermissionResult
+               public   abstract  int  checkPermission( @NonNull String permission ,int pid ,int uid);
+               @CheckResult( suggest="#enforceCallingOrSelfPermission( String ,String )")
+               public   abstract  int   checkCallingOrSelfPermission( @NonNull  String  permission );
+
+        （10）@VisbleForTesiong
+            单元测试中可能需要访问到一些不可见的类、函数或变量，这时可以使用@VisbleForTesing 注解来使其对测试可见
+
+        （11）@Keep
+            @keep注解用来标记在Proguard 混淆过程中不需要混淆的类或者方法。如果你曾经在编写混淆文件时使用过，那么@keep 的用法很简单

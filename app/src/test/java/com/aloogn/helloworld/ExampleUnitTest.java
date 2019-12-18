@@ -2,6 +2,8 @@ package com.aloogn.helloworld;
 
 import android.util.Log;
 
+import com.aloogn.demo.jni.JNIUtil;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,11 +26,7 @@ public class ExampleUnitTest {
 
     @Test
     public void testGet() {
-        for (int i=1;i<10;i++){
-            for (int j=1;j<=i;j++){
-                System.out.print(i+"*"+j+"="+i*j+" ");
-            }
-            System.out.println();
-        }
+        String str = JNIUtil.sayHekkFromJDI();
+        System.out.println(str);
     }
 }

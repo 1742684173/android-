@@ -1,0 +1,123 @@
+1.gradle-wrapper.properties：
+    决定在构建项目时使用哪个 Gradle 版本。它将随后会自动为你下载并保存该版本的 Gradle 。如果你在 Mac
+上使用，运行下面命令 ls ~/.gradle/wrapper/dists/ 你就可以看到 Gradle Wrapper 曾为你下载过的所有
+Gradle 版本。
+
+//distributionBase和distributionPath组合在一起，是解压gradle-4.4-all.zip之后的文件的存放位置。
+//distributionPath是distributionBase指定的目录下的子目录。
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+
+//zipStoreBase和zipStorePath组合在一起，是下载的gradle-3.1-bin.zip所存放的位置。
+zipStoreBase=GRADLE_USER_HOME  // GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+
+//是要下载的gradle的地址
+distributionUrl=https\://services.gradle.org/distributions/gradle-4.4-all.zip
+
+
+2.settings.gradle
+    settings.gradle 文件是保存在你通知 Gradle 的地方，即你的工程所有的子工程 /module 目录下。
+这是通过 include 命令完成的。如果你将另一个模块添加到你的工程中，Android Studio 将会自动
+将其添加到这个文件中。
+
+3.build.gradle
+    从 Gradle 的角度来看，我们的工程被认为是一个多工程构建，其中你拥有一个根项目以及一个到多个子工程。
+从 Android 开发者的角度来看，这些子工程被称为 module（模块）。这就是为什么你会看到两个
+build.gradle 文件的原因。一个是给根项目的，另一个是给伴随着你的项目的 app 模块的。
+
+/build.gradle
+buildscript {//用于告知 Gradle 脚本本身，关于编译本项目需要的那些
+    repositories {
+        google()
+        jcenter() //告知 Gradle 我们需要到 google() Maven 代码库和 jcenter() 代码库中检索一些事项
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2' //表示要使用的插件版本
+    }
+}
+
+allprojects {//块被用于通知 Gradle 关于所有需要编译的子项目，并使用这个代码库集合来解决所有需要的依赖项
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+/模块/build.gradle
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.aloogn.demo"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk{
+            moduleName "JNIHello"
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false //true表示对代码加密，false不加密
+            //代码加密原则 有两个文件对，getDefaultProguardFile(‘proguard-android.txt’)表示默认文件，这个文件是sdk自带的，
+            // 有一些通用的配置；但是如果apk需要更加严格的加密，我们可以在’proguard-rules.pro’文件中进行更加详尽的配置。
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+}
+
+
+4.常用命令
+./gradlew assembleDebug --console plain
+assembleDebug 任务
+--console plain 生成日志
+
+./gradlew tasks 查看当前所知道的所有任务
+
+5.共享变量的定义
+1）项目根目录下新建 common_config.gradle 文件
+2）在文件中写明整个项目所有 module 中需要的变量，比如 minSdkVersion 等等
+3）在每个 module 都声明一遍文件的引用，或者，在 project 的 build.gralde 中引用一次
+每个midule:
+    apply from: "${project.rootDir}/common_config.gradle"
+在根目录下:
+    subprojects {
+        apply from: "${project.rootDir}/common_config.gradle"
+    }
+4）将所有 module 中的变量都更换为文件中的变量的引用
+
+
+6.aar的引用
+
+
+

@@ -8,24 +8,39 @@
     tools:context=".animation.AnimationActivity">
 
     <ImageView
-        android:id="@+id/ivImg"
+        android:id="@+id/ivImgGradually"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="@drawable/anim"
+        android:background="@drawable/anim_gradually"
+        app:layout_constraintTop_toTopOf="@id/animParent"/>
+
+    <ImageView
+        android:id="@+id/ivImgInterval"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/anim_gradually"
+        app:layout_constraintLeft_toRightOf="@id/ivImgGradually"
         app:layout_constraintTop_toTopOf="@id/animParent"/>
 
 
     <Button
-        android:id="@+id/btnStart"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnStartGradually"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="start"
-        android:onClick="startClick"
-        app:layout_constraintTop_toBottomOf="@id/ivImg"/>
+        android:text="start逐帧动画"
+        app:layout_constraintBottom_toTopOf="@id/btnStartInterval"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:id="@+id/btnStartInterval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start补间动画"
+        app:layout_constraintBottom_toTopOf="@id/btnStop"/>
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="stop"
-        android:onClick="stopClick"/>
+        app:layout_constraintBottom_toBottomOf="@id/animParent"/>
 </android.support.constraint.ConstraintLayout>

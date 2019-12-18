@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <!--neshot="true"true 不用来循环播放 ，false循环播放-->
+    <item android:drawable="@drawable/ic_launcher_background" android:duration="1000"></item>
+    <item android:drawable="@drawable/main_tab_home" android:duration="1000"></item>
+    <item android:drawable="@drawable/main_tab_mine" android:duration="1000"></item>
+    <item android:drawable="@drawable/main_tab_unhome" android:duration="1000"></item>
+</animation-list>

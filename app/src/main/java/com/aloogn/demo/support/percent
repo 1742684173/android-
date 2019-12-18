@@ -1,0 +1,36 @@
+安卓手机有很多种机型、不同的屏幕、不同的分辨率，所以对安卓软件屏幕适配这一块的问题一直都不怎么友好。
+布局方面如果是线性布局LInearLayout的话还好一点，可以使用layout_weight的权重比可以实现控件按屏幕
+比例来排放。
+
+但是对于相对布局或者说帧布局这些没有layout_weight这个属性的布局来说就比较啰嗦了，如果要实现屏幕比
+例布局还得在外面再嵌套一个LinearLayout,本来使用相对布局的初衷就是减少布局的嵌套使用的，这样反复嵌
+套LinearLayout反而得不偿失。
+
+为了解决这个问题谷歌推出了一个百分比布局兼容的函数库：Android Percent Support Library.现在支持
+RelativeLayout和FrameLayout的百分比布局
+
+依赖：
+   compile "com.android.support:percent:26.+"
+
+
+Percent函数库包含以下三个类：
+
+PercentFrameLayout
+PercentRelativeLayout
+PercentLayoutHelper
+
+
+PercentRelativeLayout和PercentFrameLayout这两个类分别是对RelativeLayout和FrameLayout两个类的
+继承。因此我们还是可以使用两个父类的属性和功能，同时PercentRelativeLayouyt和PercentFrameLayout两
+个类扩展的百分比特性也可以使用，他们在xml文件中增加的配置属性如下：
+
+layout_widthPercent:用百分比表示宽度
+layout_heightPercnet:用百分比表示高度
+layout_marginPercent:用百分比表示View之间的间隔
+layout_marginLeftPercent:用百分比表示左边的间隔
+layout_marginTopPercent:用百分比表示顶部的间隔
+layout_marginRightPercent:用百分比表示右边的间隔
+layout_marginBottomPercent:用百分比表示底部的间隔
+layout_marginStartPercent:用百分比表示距离第一个View的距离
+layout_marginEndPercent:用百分比表示距离最后一个View的距离
+layout_aspectRatio:用百分比表示View的宽高比
